@@ -1,0 +1,862 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>مفاجأة آية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: one full-screen "page" at a time, a storybook that turns from envelope to twilight.
+   Single deliberate look (pastel pink to dusk), so no dark-mode variants. */
+:root {
+  --bg: #ffe6ef;
+  --pink-50: #fff6f9;
+  --pink-100: #ffe6ef;
+  --pink-200: #ffd0e1;
+  --rose: #f7a3c0;
+  --red: #c2255c;
+  --lav-100: #efe8ff;
+  --lav-200: #dcd0ff;
+  --lav-deep: #8b78d6;
+  --cream: #fff8ec;
+  --cream-2: #fdeed6;
+  --ink: #5b2a43;
+  --ink-soft: #7d4560;
+  --glass: rgba(255, 255, 255, 0.58);
+  --glass-border: rgba(255, 255, 255, 0.85);
+  --shadow: 0 10px 30px rgba(194, 37, 92, 0.16);
+  --shadow-lg: 0 20px 50px rgba(194, 37, 92, 0.22);
+  --font: 'Cairo', 'Tajawal', 'Segoe UI', Tahoma, system-ui, sans-serif;
+  --font-hand: 'Aref Ruqaa', 'Cairo', serif;
+  --nav-h: 62px;
+  color-scheme: light;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; overflow-x: clip; }
+body {
+  margin: 0; min-height: 100dvh; direction: rtl;
+  font-family: var(--font); color: var(--ink); background: var(--bg);
+  line-height: 1.8; overflow-x: clip; -webkit-tap-highlight-color: transparent;
+}
+[hidden] { display: none !important; }
+button { font: inherit; color: inherit; cursor: pointer; }
+h1, h2, p, ol, ul, figure { margin: 0; padding: 0; }
+ol, ul { list-style: none; }
+:focus-visible { outline: 3px solid var(--lav-deep); outline-offset: 3px; border-radius: 12px; }
+
+.app { position: relative; min-height: 100dvh; isolation: isolate; }
+.stage { position: relative; z-index: 2; width: 100%; padding-top: calc(var(--nav-h) + env(safe-area-inset-top, 0px)); outline: none; display: block; }
+.screen {
+  position: relative; min-height: calc(100dvh - var(--nav-h)); max-width: 920px; margin-inline: auto;
+  padding: 20px 18px 56px; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 22px; text-align: center;
+}
+.enter { animation: enter 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards; }
+.leave { animation: leave 0.4s ease forwards; }
+@keyframes enter { from { opacity: 0; transform: translateY(28px); filter: blur(8px); } }
+@keyframes leave { to { opacity: 0; transform: translateY(-22px); filter: blur(8px); } }
+.rise { animation: rise 0.9s ease-out backwards; animation-delay: var(--d, 0s); }
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } }
+
+.title { font-size: clamp(1.45rem, 5.6vw, 2.3rem); font-weight: 800; line-height: 1.5; color: var(--red); text-wrap: balance; text-shadow: 0 2px 0 rgba(255,255,255,0.7); }
+.title-lg { font-size: clamp(1.4rem, 5.4vw, 2.1rem); max-width: 22ch; }
+.subtitle { font-size: clamp(1.05rem, 3.8vw, 1.35rem); font-weight: 600; max-width: 34ch; text-wrap: balance; }
+.subtitle.soft { font-weight: 400; color: var(--ink-soft); font-size: clamp(0.95rem, 3.4vw, 1.1rem); max-width: 44ch; }
+.glass { background: var(--glass); border: 1.5px solid var(--glass-border); box-shadow: var(--shadow); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+.cta-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+
+.cta {
+  position: relative; border: 0; padding: 14px 30px; min-height: 52px; min-width: 170px; max-width: 100%;
+  border-radius: 999px; font-weight: 800; font-size: clamp(1rem, 3.8vw, 1.15rem); line-height: 1.4;
+  transition: transform 0.2s, filter 0.2s, opacity 0.2s;
+}
+.cta:hover:not(:disabled) { transform: scale(1.04); }
+.cta:active:not(:disabled) { transform: scale(0.96); }
+.cta-primary { color: #fff; background: linear-gradient(135deg, #e8517f, #c2255c 70%); box-shadow: 0 10px 26px rgba(194,37,92,0.38), inset 0 1px 0 rgba(255,255,255,0.45); animation: cta-glow 2.8s ease-in-out infinite; }
+.cta-soft { color: var(--red); background: linear-gradient(135deg, #fff, var(--pink-100)); border: 2px solid var(--rose); box-shadow: 0 6px 18px rgba(194,37,92,0.16); }
+.cta-light { color: #5b1a3c; background: linear-gradient(135deg, #fff, #ffe0ee); box-shadow: 0 0 28px rgba(255,190,220,0.55); }
+.cta:disabled { cursor: default; filter: saturate(0.7); opacity: 0.75; animation: none; }
+@keyframes cta-glow {
+  0%, 100% { box-shadow: 0 10px 26px rgba(194,37,92,0.38), 0 0 0 0 rgba(240,71,111,0.35), inset 0 1px 0 rgba(255,255,255,0.45); }
+  50% { box-shadow: 0 12px 32px rgba(194,37,92,0.5), 0 0 0 12px rgba(240,71,111,0), inset 0 1px 0 rgba(255,255,255,0.45); }
+}
+.icon-btn { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid var(--glass-border); background: rgba(255,255,255,0.7); color: var(--red); box-shadow: 0 4px 12px rgba(194,37,92,0.14); transition: transform 0.2s, background 0.2s; padding: 0; }
+.icon-btn:hover { transform: scale(1.08); }
+.icon-btn.is-on { background: linear-gradient(135deg, #e8517f, #c2255c); color: #fff; }
+.icon-btn svg, .lb-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* nav */
+.nav { position: fixed; inset: 0 0 auto 0; z-index: 50; padding: env(safe-area-inset-top, 0px) 12px 0; height: calc(var(--nav-h) + env(safe-area-inset-top, 0px)); display: flex; align-items: center; gap: 12px; background: linear-gradient(to bottom, rgba(255,246,249,0.85), rgba(255,246,249,0)); transition: background 1s; }
+.nav-logo { display: flex; align-items: center; gap: 6px; font-weight: 800; color: var(--red); flex-shrink: 0; transition: color 1s; }
+.progress { position: relative; flex: 1; min-width: 0; max-width: 340px; height: 12px; margin-inline: auto; border-radius: 999px; background: rgba(255,255,255,0.7); border: 1px solid rgba(224,82,127,0.25); overflow: hidden; }
+.progress-fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, #f7a3c0, #e0527f, #c2255c); transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+.nav-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.app[data-theme='dusk'] .nav { background: linear-gradient(to bottom, rgba(30,27,75,0.7), rgba(30,27,75,0)); }
+.app[data-theme='dusk'] .nav-logo { color: #ffd6e8; }
+.app[data-theme='dusk'] .progress { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.35); }
+
+/* background */
+.bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.bg-day, .bg-dusk { position: absolute; inset: 0; transition: opacity 1.4s ease; }
+.bg-day { background: radial-gradient(120% 80% at 50% 0%, #fff6f9 0%, #ffe6ef 40%, #ffd0e1 75%, #e9ddff 100%); }
+.bg-dusk { opacity: 0; background: linear-gradient(to bottom, #1e1b4b 0%, #4a2c7a 32%, #a64d8f 62%, #f08aa8 86%, #ffc7b8 100%); }
+.app[data-theme='dusk'] .bg-dusk { opacity: 1; }
+.app[data-theme='dusk'] .bg-day { opacity: 0; }
+.bg-glow { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.55; animation: drift 18s ease-in-out infinite alternate; }
+.bg-glow-a { width: 46vmax; height: 46vmax; top: -14vmax; inset-inline-start: -12vmax; background: #ffc2d9; }
+.bg-glow-b { width: 40vmax; height: 40vmax; bottom: -12vmax; inset-inline-end: -10vmax; background: #d9ccff; animation-delay: -6s; }
+.bg-glow-c { width: 26vmax; height: 26vmax; top: 40%; inset-inline-end: 20%; background: #fff0c9; opacity: 0.4; animation-delay: -10s; }
+.app[data-theme='dusk'] .bg-glow { opacity: 0.22; }
+@keyframes drift { to { transform: translate3d(4vmax, 3vmax, 0) scale(1.12); } }
+.star { position: absolute; border-radius: 50%; background: #fff; box-shadow: 0 0 8px 2px rgba(255,255,255,0.9), 0 0 14px 4px rgba(255,190,220,0.6); opacity: 0.35; animation: twinkle 3s ease-in-out infinite; }
+.app[data-theme='dusk'] .star { opacity: 0.9; }
+@keyframes twinkle { 0%, 100% { opacity: 0.15; transform: scale(0.7); } 50% { opacity: 1; transform: scale(1.25); } }
+.bg-clouds { position: absolute; inset: 0; opacity: 0; transition: opacity 1.6s ease; }
+.app[data-theme='dusk'] .bg-clouds { opacity: 1; }
+.cloud { position: absolute; right: -40%; border-radius: 999px; background: radial-gradient(closest-side, rgba(255,205,225,0.75), rgba(255,205,225,0)); filter: blur(10px); animation: cloud-move linear infinite; }
+@keyframes cloud-move { to { transform: translateX(-180vw); } }
+.float-heart { position: absolute; bottom: -40px; opacity: 0; filter: drop-shadow(0 4px 8px rgba(194,37,92,0.25)); animation: float-up linear infinite; }
+@media (max-width: 600px) { .float-heart:nth-child(n + 9) { display: none; } }
+@keyframes float-up {
+  0% { transform: translate3d(0,0,0) rotate(-8deg); opacity: 0; }
+  12% { opacity: 0.75; }
+  50% { transform: translate3d(var(--sway), -55vh, 0) rotate(8deg); }
+  88% { opacity: 0.6; }
+  100% { transform: translate3d(calc(var(--sway) * -1), -112vh, 0) rotate(-6deg); opacity: 0; }
+}
+
+.heart-svg.beat { animation: heartbeat 1.6s ease-in-out infinite; transform-origin: center; }
+.heart-svg.glow { filter: drop-shadow(0 0 14px rgba(240,71,111,0.65)); }
+@keyframes heartbeat { 0%, 100% { transform: scale(1); } 14% { transform: scale(1.14); } 28% { transform: scale(1); } 42% { transform: scale(1.1); } 70% { transform: scale(1); } }
+
+.burst { position: absolute; inset: 0; pointer-events: none; z-index: 20; }
+.burst-particle { position: absolute; top: 50%; left: 50%; line-height: 1; will-change: transform, opacity; }
+
+/* 1 intro */
+.env-wrap { position: relative; width: min(340px, 86vw); padding: 70px 0 10px; display: grid; place-items: center; }
+.env-glow { position: absolute; width: 120%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,255,255,0.95), rgba(255,214,230,0.6) 55%, transparent); animation: breathe 5s ease-in-out infinite; }
+@keyframes breathe { 0%, 100% { transform: scale(0.94); opacity: 0.8; } 50% { transform: scale(1.06); opacity: 1; } }
+.envelope { --ew: min(280px, 72vw); position: relative; width: var(--ew); height: calc(var(--ew) * 0.68); filter: drop-shadow(0 18px 24px rgba(194,37,92,0.28)); perspective: 900px; animation: bob 3.6s ease-in-out infinite; }
+.envelope.opened { animation: none; }
+@keyframes bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
+.env-back { position: absolute; inset: 0; border-radius: 14px; background: linear-gradient(160deg, #f6a7c3, #e47ba2); z-index: 0; }
+.env-letter { position: absolute; inset: 9% 8% 6% 8%; z-index: 2; padding: 14px 16px; border-radius: 8px; background: linear-gradient(180deg, #fffdf6, var(--cream-2)); display: flex; flex-direction: column; gap: 8px; align-items: center; box-shadow: 0 -2px 8px rgba(0,0,0,0.06); transition: transform 0.7s ease-out 0s; }
+.opened .env-letter { transform: translateY(-92px); transition-delay: 0.55s; }
+.env-letter-line { width: 80%; height: 5px; border-radius: 4px; background: rgba(224,82,127,0.3); }
+.env-letter-line.short { width: 52%; }
+.env-letter-heart { margin-top: 4px; font-size: 1.4rem; }
+.env-front { position: absolute; inset: 0; z-index: 4; border-radius: 14px; }
+.env-front-left { background: linear-gradient(120deg, #fbb8cf, #ee8eb0); clip-path: polygon(0 0, 50% 52%, 0 100%); }
+.env-front-right { background: linear-gradient(240deg, #fbb8cf, #ee8eb0); clip-path: polygon(100% 0, 50% 52%, 100% 100%); }
+.env-front-bottom { background: linear-gradient(0deg, #f48db0, #fbb0c9); clip-path: polygon(0 100%, 50% 46%, 100% 100%); }
+.env-flap { position: absolute; inset: 0 0 auto 0; height: 56%; z-index: 5; transform-origin: top center; background: linear-gradient(180deg, #ffc9dc, #f391b3); clip-path: polygon(0 0, 100% 0, 50% 100%); border-radius: 14px 14px 0 0; transition: transform 0.7s ease-in-out, z-index 0s 0s; }
+.opened .env-flap { transform: rotateX(180deg); z-index: 1; transition: transform 0.7s ease-in-out, z-index 0s 0.35s; }
+.env-seal { position: absolute; z-index: 8; top: 56%; left: 50%; translate: -50% -50%; width: 58px; height: 58px; border: 0; padding: 0; border-radius: 50%; display: grid; place-items: center; font-size: 1.7rem; color: #fff; background: radial-gradient(circle at 35% 30%, #ff7a9f, #c2255c 70%); box-shadow: 0 6px 14px rgba(120,10,50,0.4), inset 0 2px 3px rgba(255,255,255,0.45); animation: heartbeat 2s ease-in-out infinite; transition: scale 0.35s, opacity 0.35s, rotate 0.35s; }
+.opened .env-seal { scale: 0; opacity: 0; rotate: 40deg; pointer-events: none; }
+.deco { position: absolute; pointer-events: none; filter: drop-shadow(0 4px 6px rgba(194,37,92,0.2)); }
+.deco-flower { font-size: 1.8rem; animation: sway 5s ease-in-out infinite alternate; }
+.deco.f1 { bottom: -2px; inset-inline-start: 6%; }
+.deco.f2 { bottom: 6px; inset-inline-end: 8%; font-size: 2.1rem; animation-delay: -2s; }
+.deco.f3 { bottom: -8px; inset-inline-start: 38%; font-size: 1.4rem; animation-delay: -3.5s; }
+.deco-spark { font-size: 1.3rem; animation: twinkle 2.6s ease-in-out infinite; }
+.deco.s1 { top: 40px; inset-inline-start: 4%; }
+.deco.s2 { top: 70px; inset-inline-end: 6%; animation-delay: -1.2s; }
+@keyframes sway { from { transform: rotate(-8deg); } to { transform: rotate(8deg); } }
+
+/* 2 letter + 7 gift letter */
+.paper, .hand-letter { position: relative; width: min(560px, 100%); padding: 34px 26px 26px; border-radius: 10px 10px 18px 18px; text-align: start; background: repeating-linear-gradient(to bottom, transparent 0 33px, rgba(224,82,127,0.12) 33px 34px), linear-gradient(180deg, #fffdf6, var(--cream) 60%, var(--cream-2)); box-shadow: var(--shadow-lg), inset 0 0 0 1px rgba(224,82,127,0.18); color: var(--ink); }
+.paper { cursor: pointer; }
+.paper::before, .hand-letter::before { content: ''; position: absolute; inset-block: 0; inset-inline-start: 18px; width: 2px; background: rgba(224,82,127,0.25); }
+.paper-tape { position: absolute; top: -14px; left: 50%; translate: -50% 0; width: 110px; height: 28px; background: rgba(220,208,255,0.85); transform: rotate(-3deg); border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+.paper p, .paper h2, .hand-letter p, .hand-letter h2 { padding-inline-start: 14px; }
+.letter-block { animation: letter-in 1s ease-out backwards; }
+@keyframes letter-in { from { opacity: 0; transform: translateY(14px); filter: blur(6px); } }
+.letter-title h2 { font-family: var(--font-hand); font-size: clamp(1.4rem, 5.2vw, 1.8rem); color: var(--red); margin-bottom: 14px; line-height: 1.6; }
+.letter-p p, .letter-highlight p { font-size: clamp(1.02rem, 3.7vw, 1.15rem); line-height: 2; margin-bottom: 12px; }
+.letter-highlight p { font-family: var(--font-hand); font-size: clamp(1.3rem, 5vw, 1.65rem); font-weight: 700; color: var(--red); text-align: center; padding-inline-start: 0; margin-block: 6px 14px; }
+.letter-sign p { white-space: pre-line; font-family: var(--font-hand); font-size: 1.4rem; color: var(--red); line-height: 1.7; }
+.letter-heart { display: flex; justify-content: center; margin-top: 10px; }
+.tap-hint { margin-top: 8px; font-size: 0.85rem; color: var(--ink-soft); text-align: center; padding-inline-start: 0 !important; }
+
+/* 3 story */
+.date-badge { display: inline-flex; gap: 10px; align-items: center; padding: 8px 24px; border-radius: 999px; font-size: clamp(1.2rem, 5vw, 1.6rem); font-weight: 800; color: #fff; background: linear-gradient(135deg, #e8517f, #c2255c); box-shadow: var(--shadow); }
+.timeline { position: relative; width: min(560px, 100%); display: flex; flex-direction: column; gap: 22px; padding-inline-start: 46px; text-align: start; }
+.timeline-line { position: absolute; inset-block: 14px; inset-inline-start: 17px; width: 4px; border-radius: 4px; background: repeating-linear-gradient(to bottom, var(--rose) 0 10px, transparent 10px 18px); transform-origin: top; animation: grow 1.6s ease-in-out 0.3s backwards; }
+@keyframes grow { from { transform: scaleY(0); } }
+.timeline-item { position: relative; }
+.timeline-dot { position: absolute; inset-inline-start: -46px; top: 12px; width: 38px; height: 38px; display: grid; place-items: center; border-radius: 50%; color: #fff; font-size: 1rem; line-height: 1; background: linear-gradient(135deg, #f58cb0, #c2255c); box-shadow: 0 0 0 5px rgba(255,255,255,0.7), var(--shadow); }
+.timeline-card { padding: 16px 20px; border-radius: 22px; font-size: clamp(1rem, 3.6vw, 1.12rem); line-height: 1.95; min-width: 0; }
+
+/* 4 gallery */
+.scrap-grid { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 16px; padding: 10px 4px; }
+@media (min-width: 700px) { .scrap-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px 24px; } }
+.scrap-item { position: relative; transform: rotate(var(--tilt, 0deg)); transition: transform 0.3s; animation: rise 0.6s ease-out backwards; animation-delay: var(--d, 0s); }
+.scrap-item:hover { transform: rotate(0) scale(1.04); z-index: 3; }
+.polaroid { position: relative; display: block; width: 100%; padding: 10px 10px 12px; border: 0; border-radius: 6px; background: #fff; box-shadow: 0 10px 24px rgba(91,42,67,0.22); transition: box-shadow 0.25s; }
+.polaroid:hover { box-shadow: 0 18px 34px rgba(91,42,67,0.3); }
+.tape { position: absolute; z-index: 2; top: -11px; left: 50%; translate: -50% 0; width: 64px; height: 20px; background: rgba(247,163,192,0.75); transform: rotate(4deg); border-radius: 3px; }
+.scrap-item:nth-child(even) .tape { background: rgba(220,208,255,0.9); transform: rotate(-5deg); }
+.polaroid-img { width: 100%; aspect-ratio: 3 / 4; border-radius: 3px; }
+.polaroid-caption { display: block; margin-top: 10px; min-height: 3.2em; font-family: var(--font-hand); font-size: clamp(0.95rem, 3.4vw, 1.1rem); line-height: 1.6; text-wrap: balance; }
+.safe-img { position: relative; overflow: hidden; background: linear-gradient(135deg, var(--pink-200), var(--lav-200)); }
+.safe-img img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity 0.5s; object-fit: cover; }
+.safe-img.contain img { object-fit: contain; }
+.safe-img.ok img { opacity: 1; }
+.img-fallback { position: absolute; inset: 0; display: grid; place-items: center; font-size: 3rem; background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.8), transparent 45%), linear-gradient(135deg, var(--pink-200), var(--lav-200)); }
+.safe-img.ok .img-fallback { display: none; }
+.safe-img:not(.ok):not(.error) .img-fallback { background-size: 200% 100%; background-image: linear-gradient(100deg, var(--pink-100) 30%, #fff 50%, var(--pink-100) 70%); animation: shimmer 1.4s linear infinite; }
+.safe-img:not(.ok):not(.error) .img-fallback span { opacity: 0.4; }
+@keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+.lightbox { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 70px 14px 24px; background: rgba(43,12,30,0.88); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); touch-action: pan-y; animation: fade 0.25s ease; }
+@keyframes fade { from { opacity: 0; } }
+.lb-figure { position: relative; display: flex; flex-direction: column; align-items: center; gap: 12px; width: min(92vw, 560px); animation: lb-in 0.3s ease; touch-action: pan-y; user-select: none; }
+@keyframes lb-in { from { opacity: 0; transform: translateX(calc(var(--dir, 1) * -50px)) scale(0.96); } }
+.lb-img { width: 100%; height: min(72dvh, 680px); border-radius: 14px; background: rgba(255,255,255,0.06); }
+.lb-figure figcaption { font-family: var(--font-hand); color: #fff; font-size: 1.25rem; text-align: center; }
+.lb-count { color: rgba(255,255,255,0.7); font-size: 0.9rem; }
+.lb-btn { position: absolute; z-index: 3; width: 48px; height: 48px; padding: 0; border: 0; border-radius: 50%; display: grid; place-items: center; color: #fff; background: rgba(255,255,255,0.18); transition: background 0.2s; }
+.lb-btn:hover { background: rgba(255,255,255,0.32); }
+.lb-btn svg { width: 24px; height: 24px; }
+.lb-close { top: calc(14px + env(safe-area-inset-top, 0px)); inset-inline-start: 14px; }
+.lb-next { top: 50%; left: 10px; translate: 0 -50%; }
+.lb-prev { top: 50%; right: 10px; translate: 0 -50%; }
+
+/* 5 timer */
+.counter { width: min(520px, 100%); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(8px, 2.4vw, 16px); }
+.tile { display: flex; flex-direction: column; align-items: center; padding: clamp(12px, 3vw, 20px) 4px; border-radius: 22px; }
+.tile-num { display: block; font-size: clamp(1.7rem, 8vw, 2.9rem); font-weight: 800; line-height: 1.2; color: var(--red); font-variant-numeric: tabular-nums; }
+.tile-label { font-size: clamp(0.8rem, 3vw, 1rem); font-weight: 600; color: var(--ink-soft); }
+.note-card { padding: 24px; border-radius: 28px; font-size: 1.1rem; }
+
+/* 6 messages */
+.flip-grid { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+@media (min-width: 700px) { .flip-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; } }
+.flip-grid li { animation: rise 0.5s ease-out backwards; animation-delay: var(--d, 0s); }
+.flip-card { display: block; width: 100%; height: clamp(210px, 52vw, 230px); padding: 0; border: 0; background: none; perspective: 900px; }
+.flip-inner { position: relative; display: block; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.75s cubic-bezier(0.3, 1.3, 0.5, 1); }
+.flip-card.is-open .flip-inner { transform: rotateY(180deg); }
+.flip-card:hover:not(.is-open) .flip-inner { transform: translateY(-4px) rotate(-1.5deg); }
+.flip-face { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 16px 14px; border-radius: 24px; backface-visibility: hidden; -webkit-backface-visibility: hidden; box-shadow: var(--shadow); }
+.flip-front { color: #fff; background: linear-gradient(145deg, #f58cb0, #c2255c); border: 3px solid rgba(255,255,255,0.6); }
+.flip-icon { font-size: 1.9rem; line-height: 1; }
+.flip-hint { font-size: 0.95rem; font-weight: 600; }
+.flip-back { transform: rotateY(180deg); color: var(--ink); font-size: clamp(0.95rem, 3.5vw, 1.08rem); font-weight: 600; line-height: 1.75; text-wrap: balance; background: linear-gradient(160deg, #fffdf6, var(--lav-100)); border: 3px solid var(--lav-200); }
+.bonus { min-height: 4px; width: min(520px, 100%); }
+.bonus-card { position: relative; padding: 26px 22px 20px; border-radius: 26px; font-size: clamp(1.05rem, 3.9vw, 1.2rem); font-weight: 600; background: linear-gradient(160deg, #fffdf6, var(--pink-100)); animation: pop 0.5s cubic-bezier(0.3, 1.5, 0.5, 1); }
+@keyframes pop { from { opacity: 0; transform: translateY(24px) scale(0.9) rotate(-2deg); } }
+.bonus-seal { position: absolute; top: -18px; left: 50%; translate: -50% 0; font-size: 1.8rem; }
+
+/* 7 gift */
+.gift { gap: 18px; }
+.spotlight { position: absolute; top: 0; left: 50%; translate: -50% 0; width: min(560px, 120vw); height: 85%; background: conic-gradient(from 180deg at 50% 0%, transparent 150deg, rgba(255,255,255,0.55) 175deg, rgba(255,255,255,0.55) 185deg, transparent 210deg); filter: blur(8px); opacity: 0.85; pointer-events: none; z-index: -1; }
+.gift-box-wrap { position: relative; width: min(300px, 76vw); aspect-ratio: 240 / 250; transition: width 0.9s ease-in-out; }
+.gift.is-open .gift-box-wrap { width: min(180px, 46vw); }
+.gift-svg { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 16px 20px rgba(194,37,92,0.3)); }
+.idle .gift-svg { animation: wiggle 2.6s ease-in-out infinite; transform-origin: 50% 90%; }
+@keyframes wiggle { 0%, 60%, 100% { transform: rotate(0); } 66% { transform: rotate(-3deg); } 72% { transform: rotate(3deg); } 78% { transform: rotate(-2deg); } 84% { transform: rotate(2deg); } }
+.gift-svg .lid, .gift-svg .bow { transform-box: fill-box; transform-origin: center; }
+.gift-svg .lid { transition: transform 1s cubic-bezier(0.3, 1.4, 0.5, 1); }
+.lid-up .lid { transform: translate(-18px, -78px) rotate(-16deg); }
+.gift-svg .bow { transition: transform 0.9s ease-in-out, opacity 0.9s; }
+.untied .bow { transform: translateY(-26px) rotate(8deg) scale(0.9); opacity: 0; }
+.gift-svg .light { opacity: 0; transition: opacity 0.6s; }
+.lid-up .light { opacity: 1; }
+.gift-particles { position: absolute; inset: -20% -20% 0 -20%; pointer-events: none; }
+.gp { position: absolute; bottom: 20%; width: 7px; height: 7px; border-radius: 50%; background: #fff; box-shadow: 0 0 10px 3px rgba(255,214,120,0.9); opacity: 0; animation: gp-rise 4s ease-in infinite; }
+@keyframes gp-rise { 0% { transform: translateY(0) scale(0.6); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(-160px) scale(1.2); opacity: 0; } }
+.hand-letter { font-family: var(--font-hand); animation: pop 0.9s ease-out; }
+.hand-letter h2 { font-size: clamp(1.5rem, 5.6vw, 2rem); color: var(--red); margin-bottom: 8px; }
+.hand-letter p { font-size: clamp(1.1rem, 4vw, 1.3rem); line-height: 2.05; margin-bottom: 10px; animation: rise 0.8s ease-out backwards; animation-delay: var(--d, 0s); }
+.hand-letter .hand-sign { font-size: 1.5rem; font-weight: 700; color: var(--red); text-align: end; }
+
+/* 8 finale */
+.finale { gap: 20px; color: #fff; }
+.finale .title { color: #fff; text-shadow: 0 0 22px rgba(255,180,215,0.7); }
+.finale-text { width: min(600px, 100%); display: flex; flex-direction: column; gap: 16px; }
+.finale-text p { padding: 14px 18px; border-radius: 20px; font-size: clamp(1.02rem, 3.8vw, 1.2rem); line-height: 2; background: rgba(30,10,60,0.38); border: 1px solid rgba(255,255,255,0.22); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.big-heart { position: relative; display: grid; place-items: center; margin-block: 10px; }
+.big-heart-halo { position: absolute; width: 260px; max-width: 80vw; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,140,190,0.7), transparent); animation: breathe 3.2s ease-in-out infinite; }
+.big-heart .heart-svg { position: relative; width: clamp(110px, 34vw, 150px); height: auto; }
+.love-line { font-size: clamp(1.8rem, 8vw, 3rem); font-weight: 800; line-height: 1.4; text-shadow: 0 0 24px rgba(255,150,200,0.9); }
+.signature { font-family: var(--font-hand); font-size: clamp(1.3rem, 5vw, 1.7rem); color: #ffe0ee; }
+
+@media (max-width: 380px) {
+  .screen { padding-inline: 16px; }
+  .paper, .hand-letter { padding: 30px 18px 22px; }
+  .cta { min-width: 0; width: 100%; padding-inline: 18px; }
+  .nav-name { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; transition-delay: 0s !important; }
+  .bg-hearts, .cloud, .bg-glow { display: none; }
+  .star { animation: none; opacity: 0.6; }
+}
+</style>
+
+<div class="app" id="app" dir="rtl" lang="ar" data-theme="day">
+  <div class="bg" id="bg" aria-hidden="true">
+    <div class="bg-day"></div>
+    <div class="bg-glow bg-glow-a"></div><div class="bg-glow bg-glow-b"></div><div class="bg-glow bg-glow-c"></div>
+    <div class="bg-dusk"></div>
+    <div class="bg-clouds" id="bg-clouds"></div>
+    <div id="bg-stars"></div>
+    <div class="bg-hearts" id="bg-hearts"></div>
+  </div>
+
+  <header class="nav">
+    <div class="nav-logo"><span id="nav-heart"></span><span class="nav-name">آية</span></div>
+    <div class="progress" id="progress" role="progressbar" aria-label="التقدّم في الحكاية" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <div class="progress-fill" id="progress-fill" style="width:4%"></div>
+    </div>
+    <div class="nav-actions">
+      <button type="button" class="icon-btn" id="btn-back" hidden aria-label="رجوع" title="رجوع"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+      <button type="button" class="icon-btn" id="btn-restart" hidden aria-label="ابدأ من الأول" title="ابدأ من الأول"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button>
+      <button type="button" class="icon-btn" id="btn-music" aria-pressed="false" aria-label="تشغيل الموسيقى" title="تشغيل الموسيقى"></button>
+    </div>
+  </header>
+
+  <main class="stage" id="stage" tabindex="-1"></main>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="عرض الصورة" hidden>
+    <button type="button" class="lb-btn lb-close" id="lb-close" aria-label="إغلاق"><svg viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+    <button type="button" class="lb-btn lb-next" id="lb-next" aria-label="الصورة التالية"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+    <button type="button" class="lb-btn lb-prev" id="lb-prev" aria-label="الصورة السابقة"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+    <div id="lb-slot"></div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   الإعدادات: كل النصوص والأسماء والتاريخ هنا
+   ========================================================= */
+var CONFIG = {
+  startDate: { year: 2026, month: 1, day: 17 },
+  startDateLabel: '17 يناير 2026',
+  intro: { headline: 'آية، عندي ليكي مفاجأة صغيرة أوي... بس معمولة بحب كبير ❤️', prompt: 'جاهزة تفتحي المفاجأة؟ 🥹💗', button: 'يلا نبدأ الحكاية 💌' },
+  letter: {
+    title: 'إلى آية، أجمل صدفة في حياتي.. ❤️',
+    paragraphs: [
+      'يمكن مش بعرف أقول كل اللي جوايا بالكلام، بس حبيت أعملك حاجة صغيرة تفكرك قد إيه إنتِ غالية عندي.',
+      'من يوم ما بقيتي جزء من حياتي، بقي فيه تفاصيل صغيرة بتفرحني أكتر، وضحكة ليها معنى مختلف، وأيام نفسي أحكيلك عنها كلها.',
+      'أنا مش بوعدك إن كل يوم هيكون مثالي، لكن أوعدك إني هفضل أحاول أخلي وجودي في حياتك حاجة حلوة، وإننا نصنع ذكريات نفضل نفتكرها ونضحك عليها.',
+      'الموقع ده معمول مخصوص ليكي، وكل تفصيلة فيه بتقول حاجة واحدة:'
+    ],
+    highlight: 'إنتِ غالية عندي يا آية. ❤️',
+    signature: ['بحبك،', 'أحمد'],
+    button: 'كمّلي يا آية 💗'
+  },
+  story: {
+    title: 'حكايتنا بدأت من هنا ❤️',
+    paragraphs: [
+      'في يوم 17 يناير 2026، بدأت حكاية لسه بنكتب تفاصيلها يوم ورا يوم.',
+      'يمكن وقتها مكنّاش نعرف كل اللحظات الحلوة اللي مستنيانا، بس كل حكاية جميلة بتبدأ بخطوة صغيرة.',
+      'وأنا نفسي تكون حكايتنا مليانة ضحك، وذكريات حلوة، ومواقف نفتكرها بعد سنين ونبتسم.',
+      'والأجمل إن لسه قدامنا صفحات كتير نكتبها سوا. 💕'
+    ],
+    button: 'كمّلي 💗'
+  },
+  gallery: {
+    title: 'ذكريات لسه مستنيانا 📸💗',
+    note: 'اللقطات دي مجرد لمحات من اللي نفسي نعيشه معاكي، وصورنا الحقيقية لسه هنلتقطها سوا.',
+    button: 'كمّلي 💗',
+    items: [
+      { src: 'images/photo-1.jpg', alt: 'حضن دافي بين شخصيتين كرتون', caption: 'حضن يقدر يهدّي الدنيا كلها 🤍', emoji: '🤍' },
+      { src: 'images/photo-2.jpg', alt: 'حضن ودوران وسط الطبيعة وقت الغروب', caption: 'ضحكة، وجري، وفرحة من القلب 🌅', emoji: '🌅' },
+      { src: 'images/photo-3.jpg', alt: 'لحظة هادية في الليل بين شخصيتين كرتون', caption: 'حكايات الليل الحلوة ✨', emoji: '✨' },
+      { src: 'images/photo-4.jpg', alt: 'رقصة صغيرة في شارع هادي ليلًا', caption: 'رقصة صغيرة في شارع هادي 💃', emoji: '💃' },
+      { src: 'images/photo-5.jpg', alt: 'قعدة هادية تحت شجرة ورد في الليل', caption: 'قعدة هادية وعيون بتضحك 🌸', emoji: '🌸' }
+    ]
+  },
+  timer: {
+    title: 'كل يوم معاكي حكاية جديدة ⏳❤️',
+    caption: 'من يوم 17 يناير 2026، وكل يوم فرصة لذكرى حلوة جديدة. 💗',
+    invalid: 'مش قادر أحسب الوقت دلوقتي 🥺 بس الحكاية مستمرة 💗',
+    notStarted: 'الحكاية لسه هتبدأ... والعدّاد مستنيها 💗',
+    labels: { days: 'يوم', hours: 'ساعة', minutes: 'دقيقة', seconds: 'ثانية' },
+    button: 'كمّلي 💗'
+  },
+  messages: {
+    title: 'شوية كلام من قلبي ليكي 💌',
+    hint: 'اضغطي على أي كارت عشان يتفتح 💗',
+    items: [
+      'وجودك في حياتي بيخلّي تفاصيل كتير عادية تبقى أحلى. ❤️',
+      'نفسي كل ما تبتسمي تفتكري إن فيه حد بيتمنى يشوفك مبسوطة دايمًا. 🌸',
+      'مش لازم كل يوم يكون فيه مناسبة عشان أقولك إنك غالية عندي. 💗',
+      'أحلى حاجة في الحكايات الحلوة إنها بتتكتب واحدة واحدة، وأنا مبسوط إن لينا حكاية. 🥹',
+      'لو أقدر أهديكي حاجة كل يوم، ههديكي سبب جديد يخليكي تبتسمي. 🎁',
+      'يا آية، أتمنى أكون ليكي مصدر راحة وفرحة، زي ما بتمنى أشوفك دايمًا بخير. 💕'
+    ],
+    icons: ['❤', '🌸', '💗', '🥹', '🎁', '💕'],
+    moreButton: 'عايزة رسالة كمان؟ 💌',
+    extra: [
+      'ابتسامتك حاجة بتفرق معايا أكتر مما تتخيلي. 🌷',
+      'أنا مبسوط إني بقيت جزء من أيامك، حتى لو بسيط. 💞',
+      'لو يوم حسيتي إنك تعبانة، افتكري إن فيه حد بيدعيلك من قلبه. 🤍',
+      'كل مرة بفكر فيكي، بلاقي نفسي بتبسّم من غير ما أحس. 😊',
+      'مش محتاجة تكوني مثالية عشان تكوني غالية، إنتِ كده أصلًا غالية. 🌹',
+      'نفسي دايمًا أكون سبب في يوم حلو من أيامك. ☀️',
+      'أحلى أيامي هي اللي فيها حاجة تفكرني بيكي. 🎀',
+      'ربنا يخليكي ليا، وتفضلي دايمًا بخير وفرحانة. 🤲💗',
+      'مهما انشغلت الدنيا، إنتِ دايمًا في بالي. 💭❤️',
+      'أنا فخور بيكي، وبحب أشوفك بتكبري وتحققي اللي نفسك فيه. ✨'
+    ],
+    button: 'كمّلي 💗'
+  },
+  gift: {
+    teaser: 'استني... لسه فيه مفاجأة صغيرة مستخبية ليكي! 🎁',
+    openButton: 'افتحي هديتك يا آية 💗',
+    letterTitle: 'يا آية ❤️',
+    paragraphs: [
+      'لو فيه حاجة نفسي توصلك من المفاجأة دي، فهي إنك تستاهلي كل حاجة حلوة في الدنيا.',
+      'أتمنى أيامك تكون مليانة ضحك وراحة ونجاح، وإنك تفضلي دايمًا شايفة قد إيه إنتِ شخص جميل ومميز.',
+      'مش لازم يكون فيه سبب كبير عشان نفرّح حد بنحبه، وأحلى المفاجآت ساعات بتكون مجرد لحظة معمولة من القلب.',
+      'أتمنى المفاجأة دي تكون رسمت على وشك ابتسامة. 🥹💗'
+    ],
+    signature: 'من أحمد ❤️',
+    button: 'لسه فيه حاجة أخيرة ✨'
+  },
+  finale: {
+    title: 'قبل ما تمشي... عايز أقولك حاجة ❤️',
+    paragraphs: [
+      'يا آية، مهما كانت الأيام مليانة تفاصيل، أتمنى تفضلي تلاقي فيها أسباب تفرحك وتحققي كل اللي نفسك فيه.',
+      'وأتمنى إن الحكاية اللي بدأت يوم 17 يناير 2026 تفضل مليانة لحظات حلوة وضحكات وذكريات نستناها بفارغ الصبر.',
+      'خليكي دايمًا فخورة بنفسك، ومتمسكة بأحلامك، وعارفة إنك تستاهلي كل خير.',
+      'ويمكن الموقع يخلص هنا، بس الذكريات الحلوة لسه قدامها وقت عشان تتكتب. ❤️'
+    ],
+    loveLine: 'بحبك يا آية ❤️',
+    signature: 'من أحمد، بكل الحب 💌',
+    restartButton: 'نبدأ الحكاية من الأول؟ 🔄'
+  }
+};
+var STEP_NAMES = ['المفاجأة', 'الرسالة', 'حكايتنا', 'الذكريات', 'العدّاد', 'كلام من القلب', 'الهدية', 'الختام'];
+
+(function () {
+  'use strict';
+
+  /* ---------- helpers ---------- */
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var app = $('#app'), stage = $('#stage');
+  function el(html) { var t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; }
+  var uid = 0;
+  function heart(size, opts) {
+    opts = opts || {}; uid += 1;
+    var id = 'hg' + uid;
+    return '<svg class="heart-svg ' + (opts.beat === false ? '' : 'beat') + ' ' + (opts.glow ? 'glow' : '') + '" width="' + size + '" height="' + size + '" viewBox="0 0 32 29" aria-hidden="true" focusable="false">' +
+      '<defs><linearGradient id="' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff8fb1"/><stop offset=".55" stop-color="#f0476f"/><stop offset="1" stop-color="#c2255c"/></linearGradient></defs>' +
+      '<path fill="url(#' + id + ')" d="M23.6 0c-3.4 0-5.4 1.9-7.6 4.6C13.8 1.9 11.8 0 8.4 0 3.6 0 0 3.9 0 8.9c0 7.4 8.6 12.7 14.3 19.2.9 1 2.5 1 3.4 0C23.4 21.6 32 16.3 32 8.9 32 3.9 28.4 0 23.6 0z"/>' +
+      '<ellipse cx="9" cy="7.2" rx="3.2" ry="2" fill="#fff" opacity=".35" transform="rotate(-30 9 7.2)"/></svg>';
+  }
+  var cleanups = [];
+  function later(fn, ms) { var t = setTimeout(fn, reduced ? Math.min(ms, 200) : ms); cleanups.push(function () { clearTimeout(t); }); return t; }
+  function runCleanups() { cleanups.forEach(function (f) { try { f(); } catch (e) {} }); cleanups = []; }
+
+  /* ---------- sound (nothing plays before a tap) ---------- */
+  var AC = window.AudioContext || window.webkitAudioContext;
+  var actx = null, master = null, ambient = null, musicOn = false, sfxMuted = false;
+  function ctx() {
+    if (!AC) return null;
+    try {
+      if (!actx) { actx = new AC(); master = actx.createGain(); master.gain.value = 0.6; master.connect(actx.destination); }
+      if (actx.state === 'suspended') actx.resume();
+      return actx;
+    } catch (e) { return null; }
+  }
+  function tone(f, at, dur, vol) {
+    var c = ctx(); if (!c) return;
+    var o = c.createOscillator(), g = c.createGain();
+    o.type = 'sine'; o.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, at);
+    g.gain.exponentialRampToValueAtTime(vol, at + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, at + dur);
+    o.connect(g); g.connect(master); o.start(at); o.stop(at + dur + 0.05);
+  }
+  function chime() {
+    if (sfxMuted) return;
+    var c = ctx(); if (!c) return;
+    [784, 987.77, 1318.5].forEach(function (f, i) { tone(f, c.currentTime + i * 0.11, 0.9, 0.05); });
+  }
+  var MELODY = [523.25, 659.25, 783.99, 659.25, 587.33, 783.99, 880, 783.99, 659.25, 587.33, 523.25, 587.33];
+  function startMusic() {
+    var c = ctx(); if (!c) return false;
+    musicOn = true; sfxMuted = false;
+    var i = 0;
+    var step = function () {
+      var t = c.currentTime, f = MELODY[i % MELODY.length];
+      tone(f, t, 2.2, 0.045); tone(f * 2, t, 1.2, 0.012);
+      if (i % 6 === 0) { tone(261.63, t, 5, 0.025); tone(329.63, t, 5, 0.02); }
+      i += 1;
+    };
+    step(); ambient = setInterval(step, 900);
+    return true;
+  }
+  function stopMusic() { musicOn = false; sfxMuted = true; clearInterval(ambient); ambient = null; }
+  var ICON_ON = '<svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>';
+  var ICON_OFF = '<svg viewBox="0 0 24 24"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>';
+  var btnMusic = $('#btn-music');
+  function paintMusic() {
+    btnMusic.innerHTML = musicOn ? ICON_ON : ICON_OFF;
+    btnMusic.classList.toggle('is-on', musicOn);
+    btnMusic.setAttribute('aria-pressed', String(musicOn));
+    var label = musicOn ? 'إيقاف الموسيقى' : 'تشغيل الموسيقى';
+    btnMusic.setAttribute('aria-label', label); btnMusic.title = label;
+  }
+  btnMusic.addEventListener('click', function () {
+    try { if (musicOn) stopMusic(); else startMusic(); } catch (e) { musicOn = false; }
+    paintMusic();
+  });
+  paintMusic();
+
+  /* ---------- background ---------- */
+  (function buildBackground() {
+    var seed = 17;
+    function rnd() { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; var t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }
+    var emojis = ['💗', '💖', '💕', '🤍', '🌸'], i, h = '', s = '', c = '';
+    for (i = 0; i < 14; i++) h += '<span class="float-heart" style="left:' + (rnd() * 100).toFixed(1) + '%;font-size:' + (14 + rnd() * 18).toFixed(0) + 'px;animation-duration:' + (14 + rnd() * 14).toFixed(1) + 's;animation-delay:-' + (rnd() * 24).toFixed(1) + 's;--sway:' + (10 + rnd() * 30).toFixed(0) + 'px">' + emojis[i % 5] + '</span>';
+    for (i = 0; i < 46; i++) { var sz = (2 + rnd() * 3.5).toFixed(1); s += '<span class="star" style="left:' + (rnd() * 100).toFixed(1) + '%;top:' + (rnd() * 100).toFixed(1) + '%;width:' + sz + 'px;height:' + sz + 'px;animation-duration:' + (2 + rnd() * 4).toFixed(1) + 's;animation-delay:-' + (rnd() * 6).toFixed(1) + 's"></span>'; }
+    for (i = 0; i < 4; i++) { var w = 220 + rnd() * 180; c += '<span class="cloud" style="top:' + (8 + i * 20 + rnd() * 8).toFixed(0) + '%;width:' + w.toFixed(0) + 'px;height:' + (w * 0.32).toFixed(0) + 'px;animation-duration:' + (70 + rnd() * 50).toFixed(0) + 's;animation-delay:-' + (rnd() * 60).toFixed(0) + 's"></span>'; }
+    $('#bg-hearts').innerHTML = h; $('#bg-stars').innerHTML = s; $('#bg-clouds').innerHTML = c;
+    $('#nav-heart').innerHTML = heart(26);
+  })();
+
+  /* ---------- burst of hearts ---------- */
+  function burst(host, count, radius) {
+    if (reduced || !host.animate) return;
+    var wrap = document.createElement('div'); wrap.className = 'burst'; wrap.setAttribute('aria-hidden', 'true');
+    host.appendChild(wrap);
+    var em = ['💗', '✨', '💖', '🌸', '⭐', '💕'];
+    for (var i = 0; i < count; i++) {
+      var a = (Math.PI * 2 * i) / count + Math.random() * 0.4;
+      var d = radius * (0.5 + Math.random() * 0.75);
+      var x = Math.cos(a) * d, y = Math.sin(a) * d - 50, r = (Math.random() - 0.5) * 180;
+      var sp = document.createElement('span');
+      sp.className = 'burst-particle'; sp.textContent = em[i % em.length];
+      sp.style.fontSize = (14 + Math.random() * 16).toFixed(0) + 'px';
+      wrap.appendChild(sp);
+      sp.animate([
+        { transform: 'translate(-50%,-50%) translate(0,0) scale(.2) rotate(0deg)', opacity: 1 },
+        { transform: 'translate(-50%,-50%) translate(' + x * 0.6 + 'px,' + y * 0.6 + 'px) scale(1.15) rotate(' + r / 2 + 'deg)', opacity: 1, offset: 0.6 },
+        { transform: 'translate(-50%,-50%) translate(' + x + 'px,' + y + 'px) scale(.9) rotate(' + r + 'deg)', opacity: 0 }
+      ], { duration: 1400 + Math.random() * 1100, delay: Math.random() * 200, easing: 'ease-out', fill: 'both' });
+    }
+    setTimeout(function () { wrap.remove(); }, 3000);
+  }
+
+  function cta(text, cls) { return '<button type="button" class="cta ' + (cls || 'cta-primary') + '">' + text + '</button>'; }
+  function safeImg(src, alt, emoji, cls) {
+    var box = el('<div class="safe-img ' + (cls || '') + '"><img alt="" draggable="false"><div class="img-fallback"><span aria-hidden="true">' + emoji + '</span></div></div>');
+    var img = $('img', box);
+    img.alt = alt; box.setAttribute('role', 'img'); box.setAttribute('aria-label', alt); img.alt = '';
+    img.addEventListener('load', function () { box.classList.add('ok'); });
+    img.addEventListener('error', function () { box.classList.add('error'); img.remove(); });
+    img.decoding = 'async'; img.src = src;
+    if (img.complete && img.naturalWidth > 0) box.classList.add('ok');
+    return box;
+  }
+
+  /* ---------- sections ---------- */
+  function Intro() {
+    var C = CONFIG.intro;
+    var s = el('<section class="screen intro">' +
+      '<div class="env-wrap"><div class="env-glow" aria-hidden="true"></div>' +
+      '<div class="envelope" id="envelope"><div class="env-back"></div>' +
+      '<div class="env-letter"><span class="env-letter-line"></span><span class="env-letter-line short"></span><span class="env-letter-heart" aria-hidden="true">💗</span></div>' +
+      '<div class="env-front env-front-left"></div><div class="env-front env-front-right"></div><div class="env-front env-front-bottom"></div>' +
+      '<div class="env-flap"></div><button type="button" class="env-seal" aria-label="' + C.button + '"><span aria-hidden="true">❤</span></button></div>' +
+      '<span class="deco deco-flower f1" aria-hidden="true">🌸</span><span class="deco deco-flower f2" aria-hidden="true">🌷</span><span class="deco deco-flower f3" aria-hidden="true">🌼</span>' +
+      '<span class="deco deco-spark s1" aria-hidden="true">✨</span><span class="deco deco-spark s2" aria-hidden="true">✨</span></div>' +
+      '<h1 class="title title-lg">' + C.headline + '</h1><p class="subtitle">' + C.prompt + '</p>' + cta(C.button) + '</section>');
+    var env = $('#envelope', s), main = $('.cta', s), seal = $('.env-seal', s), opened = false;
+    function open() {
+      if (opened) return; opened = true;
+      env.classList.add('opened'); main.disabled = true; seal.disabled = true;
+      chime(); burst(env, 30, 200);
+      later(function () { goTo(1); }, 2100);
+    }
+    main.addEventListener('click', open); seal.addEventListener('click', open);
+    return s;
+  }
+
+  function Letter() {
+    var L = CONFIG.letter;
+    var blocks = [{ t: 'title', x: L.title }];
+    L.paragraphs.forEach(function (x) { blocks.push({ t: 'p', x: x }); });
+    blocks.push({ t: 'highlight', x: L.highlight }, { t: 'sign', x: L.signature.join('\n') });
+    var s = el('<section class="screen letter-screen"><article class="paper" aria-label="رسالة من أحمد"><span class="paper-tape" aria-hidden="true"></span><div class="paper-body"></div>' +
+      '<div class="letter-heart">' + heart(46, { glow: true }) + '</div><p class="tap-hint">اضغطي على الورقة لو عايزة تقري الرسالة كلها بسرعة 🤍</p></article>' +
+      '<div class="cta-row" style="visibility:hidden">' + cta(L.button) + '</div></section>');
+    var body = $('.paper-body', s), row = $('.cta-row', s), btn = $('.cta', s), hint = $('.tap-hint', s), shown = 0, timer = null;
+    btn.disabled = true;
+    function add() {
+      if (shown >= blocks.length) return;
+      var b = blocks[shown]; shown += 1;
+      var d = document.createElement('div');
+      d.className = 'letter-block letter-' + b.t;
+      var node = document.createElement(b.t === 'title' ? 'h2' : 'p'); node.textContent = b.x;
+      d.appendChild(node); body.appendChild(d);
+      if (shown > 1 && !reduced) d.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      if (shown >= blocks.length) { clearInterval(timer); row.style.visibility = 'visible'; btn.disabled = false; hint.hidden = true; }
+    }
+    function all() { while (shown < blocks.length) add(); }
+    add();
+    if (reduced) all(); else { timer = setInterval(add, 2200); cleanups.push(function () { clearInterval(timer); }); }
+    $('.paper', s).addEventListener('click', all);
+    btn.addEventListener('click', function () { chime(); goTo(2); });
+    return s;
+  }
+
+  function Story() {
+    var C = CONFIG.story, glyphs = ['❤', '★', '✿', '✦'];
+    var items = C.paragraphs.map(function (p, i) {
+      return '<li class="timeline-item rise" style="--d:' + (0.4 + i * 0.35).toFixed(2) + 's"><span class="timeline-dot" aria-hidden="true">' + glyphs[i % 4] + '</span><p class="timeline-card glass">' + p + '</p></li>';
+    }).join('');
+    var s = el('<section class="screen story"><h2 class="title">' + C.title + '</h2><div class="date-badge rise" style="--d:.2s"><span aria-hidden="true">💞</span>' + CONFIG.startDateLabel + '</div>' +
+      '<ol class="timeline"><span class="timeline-line" aria-hidden="true"></span>' + items + '</ol>' + cta(C.button) + '</section>');
+    $('.cta', s).addEventListener('click', function () { chime(); goTo(3); });
+    return s;
+  }
+
+  /* lightbox */
+  var lb = $('#lightbox'), lbSlot = $('#lb-slot'), lbIndex = 0, lbItems = [], lbLast = null, lbDir = 1;
+  function lbRender() {
+    var it = lbItems[lbIndex];
+    var fig = el('<figure class="lb-figure" style="--dir:' + lbDir + '"><figcaption></figcaption><span class="lb-count" aria-hidden="true"></span></figure>');
+    $('figcaption', fig).textContent = it.caption;
+    $('.lb-count', fig).textContent = (lbIndex + 1) + ' / ' + lbItems.length;
+    fig.insertBefore(safeImg(it.src, it.alt, it.emoji, 'lb-img contain'), fig.firstChild);
+    var x0 = null;
+    fig.addEventListener('pointerdown', function (e) { x0 = e.clientX; });
+    fig.addEventListener('pointerup', function (e) {
+      if (x0 === null) return; var dx = e.clientX - x0; x0 = null;
+      if (Math.abs(dx) > 70) lbGo(dx < 0 ? 1 : -1);
+    });
+    fig.addEventListener('click', function (e) { e.stopPropagation(); });
+    lbSlot.innerHTML = ''; lbSlot.appendChild(fig);
+  }
+  function lbGo(d) { lbDir = d; lbIndex = (lbIndex + d + lbItems.length) % lbItems.length; lbRender(); }
+  function lbOpen(items, i) {
+    lbItems = items; lbIndex = i; lbDir = 1; lbLast = document.activeElement;
+    lbRender(); lb.hidden = false; document.body.style.overflow = 'hidden';
+    $('#lb-close').focus();
+  }
+  function lbClose() {
+    if (lb.hidden) return;
+    lb.hidden = true; lbSlot.innerHTML = ''; document.body.style.overflow = '';
+    if (lbLast && lbLast.focus) lbLast.focus();
+  }
+  $('#lb-close').addEventListener('click', function (e) { e.stopPropagation(); lbClose(); });
+  $('#lb-next').addEventListener('click', function (e) { e.stopPropagation(); lbGo(1); });
+  $('#lb-prev').addEventListener('click', function (e) { e.stopPropagation(); lbGo(-1); });
+  lb.addEventListener('click', lbClose);
+  document.addEventListener('keydown', function (e) {
+    if (lb.hidden) return;
+    if (e.key === 'Escape') lbClose();
+    if (e.key === 'ArrowLeft') lbGo(1);   // RTL: left = next
+    if (e.key === 'ArrowRight') lbGo(-1);
+  });
+
+  function Gallery() {
+    var C = CONFIG.gallery, tilts = [-3, 2.5, -1.5, 3, -2.5];
+    var s = el('<section class="screen gallery"><h2 class="title">' + C.title + '</h2><p class="subtitle soft">' + C.note + '</p><ul class="scrap-grid"></ul>' + cta(C.button) + '</section>');
+    var ul = $('.scrap-grid', s);
+    C.items.forEach(function (it, i) {
+      var li = el('<li class="scrap-item" style="--tilt:' + tilts[i % 5] + 'deg;--d:' + (0.1 + i * 0.12).toFixed(2) + 's"><button type="button" class="polaroid"><span class="tape" aria-hidden="true"></span><span class="polaroid-caption"></span></button></li>');
+      var b = $('.polaroid', li);
+      b.setAttribute('aria-label', 'تكبير الصورة: ' + it.caption);
+      $('.polaroid-caption', li).textContent = it.caption;
+      b.insertBefore(safeImg(it.src, it.alt, it.emoji, 'polaroid-img'), $('.polaroid-caption', li));
+      b.addEventListener('click', function () { lbOpen(C.items, i); });
+      ul.appendChild(li);
+    });
+    $('.cta', s).addEventListener('click', function () { chime(); goTo(4); });
+    return s;
+  }
+
+  function getElapsed(start, now) {
+    if (!(start instanceof Date) || isNaN(start.getTime())) return { status: 'invalid' };
+    if (!(now instanceof Date) || isNaN(now.getTime())) return { status: 'invalid' };
+    // wall-clock difference, so daylight-saving shifts never move the hours
+    function wall(d) { return Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds()); }
+    var diff = wall(now) - wall(start);
+    if (!isFinite(diff)) return { status: 'invalid' };
+    if (diff < 0) return { status: 'future' };
+    var t = Math.floor(diff / 1000);
+    return { status: 'ok', days: Math.floor(t / 86400), hours: Math.floor((t % 86400) / 3600), minutes: Math.floor((t % 3600) / 60), seconds: t % 60 };
+  }
+  function pad(n) { return String(n).length < 2 ? '0' + n : String(n); }
+
+  function Timer() {
+    var C = CONFIG.timer, sd = CONFIG.startDate;
+    var start = new Date(sd.year, sd.month - 1, sd.day, 0, 0, 0);
+    var s = el('<section class="screen timer"><h2 class="title">' + C.title + '</h2><div id="tbox"></div><p class="subtitle">' + C.caption + '</p>' +
+      '<div class="mini-heart">' + heart(40, { glow: true }) + '</div>' + cta(C.button) + '</section>');
+    var box = $('#tbox', s), nums = null, mode = '';
+    function tick() {
+      var e = getElapsed(start, new Date());
+      if (e.status !== 'ok') {
+        if (mode !== e.status) { mode = e.status; nums = null; box.innerHTML = '<p class="note-card glass">' + (e.status === 'future' ? C.notStarted : C.invalid) + '</p>'; }
+        return;
+      }
+      if (mode !== 'ok') {
+        mode = 'ok';
+        var keys = ['days', 'hours', 'minutes', 'seconds'];
+        box.innerHTML = '<div class="counter" role="timer" aria-live="off">' + keys.map(function (k) { return '<div class="tile glass"><span class="tile-num" data-k="' + k + '"></span><span class="tile-label">' + C.labels[k] + '</span></div>'; }).join('') + '</div>';
+        nums = {}; keys.forEach(function (k) { nums[k] = $('[data-k="' + k + '"]', box); });
+      }
+      nums.days.textContent = String(e.days); nums.hours.textContent = pad(e.hours);
+      nums.minutes.textContent = pad(e.minutes); nums.seconds.textContent = pad(e.seconds);
+    }
+    tick();
+    var id = setInterval(tick, 1000); cleanups.push(function () { clearInterval(id); });
+    $('.cta', s).addEventListener('click', function () { chime(); goTo(5); });
+    return s;
+  }
+
+  function Messages() {
+    var C = CONFIG.messages;
+    var s = el('<section class="screen messages"><h2 class="title">' + C.title + '</h2><p class="subtitle soft">' + C.hint + '</p><ul class="flip-grid"></ul>' +
+      '<div class="bonus" role="status" aria-live="polite"></div><div class="cta-row">' + cta(C.moreButton, 'cta-soft') + cta(C.button) + '</div></section>');
+    var grid = $('.flip-grid', s), bonus = $('.bonus', s);
+    C.items.forEach(function (text, i) {
+      var li = el('<li style="--d:' + (i * 0.08).toFixed(2) + 's"><button type="button" class="flip-card" aria-pressed="false"><span class="flip-inner">' +
+        '<span class="flip-face flip-front"><span class="flip-icon" aria-hidden="true">' + C.icons[i] + '</span><span class="flip-hint">اضغطي 💌</span></span>' +
+        '<span class="flip-face flip-back" aria-hidden="true"></span></span></button></li>');
+      var b = $('.flip-card', li), back = $('.flip-back', li);
+      back.textContent = text; b.setAttribute('aria-label', 'افتحي الكارت رقم ' + (i + 1));
+      b.addEventListener('click', function () {
+        var open = b.classList.toggle('is-open');
+        b.setAttribute('aria-pressed', String(open)); back.setAttribute('aria-hidden', String(!open));
+        b.setAttribute('aria-label', open ? text : 'افتحي الكارت رقم ' + (i + 1));
+        chime();
+      });
+      grid.appendChild(li);
+    });
+    var queue = [], last = null;
+    function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+    $('.cta-soft', s).addEventListener('click', function () {
+      if (!queue.length) { queue = shuffle(C.extra); if (queue.length > 1 && queue[0] === last) queue.push(queue.shift()); }
+      last = queue.shift(); chime();
+      var card = el('<div class="bonus-card glass"><span class="bonus-seal" aria-hidden="true">💌</span><p></p></div>');
+      $('p', card).textContent = last;
+      bonus.innerHTML = ''; bonus.appendChild(card);
+    });
+    $('.cta-primary', s).addEventListener('click', function () { chime(); goTo(6); });
+    return s;
+  }
+
+  function Gift() {
+    var G = CONFIG.gift;
+    var gp = ''; var lefts = [22, 34, 46, 58, 70, 28, 52, 64];
+    for (var i = 0; i < 8; i++) gp += '<span class="gp" style="left:' + lefts[i] + '%;animation-delay:-' + (i * 0.5).toFixed(1) + 's"></span>';
+    var svg = '<svg class="gift-svg" viewBox="0 0 240 250" role="img" aria-label="هدية صغيرة" focusable="false"><defs>' +
+      '<linearGradient id="gBody" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffc1d6"/><stop offset="1" stop-color="#f48fb1"/></linearGradient>' +
+      '<linearGradient id="gLid" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd3e2"/><stop offset="1" stop-color="#f69bbb"/></linearGradient>' +
+      '<linearGradient id="gRibbon" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f2557d"/><stop offset="1" stop-color="#c2255c"/></linearGradient>' +
+      '<radialGradient id="gLight" cx=".5" cy="1" r=".9"><stop offset="0" stop-color="#fff7cc" stop-opacity=".95"/><stop offset="1" stop-color="#fff7cc" stop-opacity="0"/></radialGradient></defs>' +
+      '<ellipse cx="120" cy="232" rx="82" ry="9" fill="#c2255c" opacity=".15"/>' +
+      '<polygon class="light" points="70,122 170,122 215,-10 25,-10" fill="url(#gLight)"/>' +
+      '<rect x="40" y="118" width="160" height="108" rx="12" fill="url(#gBody)"/><rect x="108" y="118" width="24" height="108" fill="url(#gRibbon)"/><rect x="40" y="118" width="160" height="10" fill="#c2255c" opacity=".12"/>' +
+      '<g class="lid"><rect x="30" y="86" width="180" height="40" rx="12" fill="url(#gLid)"/><rect x="108" y="86" width="24" height="40" fill="url(#gRibbon)"/>' +
+      '<g class="bow"><path d="M120 84 C 92 52, 62 60, 74 82 C 82 94, 106 90, 120 84Z" fill="url(#gRibbon)"/><path d="M120 84 C 148 52, 178 60, 166 82 C 158 94, 134 90, 120 84Z" fill="url(#gRibbon)"/>' +
+      '<path d="M118 88 L98 112 L110 112 L122 92Z" fill="#a31b4d"/><path d="M122 88 L142 112 L130 112 L118 92Z" fill="#a31b4d"/><circle cx="120" cy="84" r="10" fill="#f2557d"/><circle cx="116.5" cy="80.5" r="3" fill="#fff" opacity=".45"/></g></g></svg>';
+    var s = el('<section class="screen gift"><div class="spotlight" aria-hidden="true"></div><h2 class="title teaser">' + G.teaser + '</h2>' +
+      '<div class="gift-box-wrap idle" id="gbox"><div class="gift-particles" aria-hidden="true">' + gp + '</div>' + svg + '</div>' +
+      '<div id="gslot"></div>' + cta(G.openButton) + '</section>');
+    var box = $('#gbox', s), btn = $('.cta', s), phase = 'closed';
+    btn.addEventListener('click', function () {
+      if (phase !== 'closed') return; phase = 'busy';
+      btn.disabled = true; chime();
+      box.classList.remove('idle'); box.classList.add('untied');
+      later(function () { box.classList.add('lid-up'); burst(box, 36, 230); chime(); }, 800);
+      later(reveal, 1900);
+    });
+    function reveal() {
+      s.classList.add('is-open');
+      $('.teaser', s).hidden = true; btn.hidden = true;
+      var d = reduced ? 0 : 0.6, step = reduced ? 0 : 0.7;
+      var paras = G.paragraphs.map(function (p, i) { return '<p style="--d:' + (d + i * step).toFixed(2) + 's"></p>'; }).join('');
+      var letter = el('<article class="hand-letter" aria-label="رسالة من الهدية"><span class="paper-tape" aria-hidden="true"></span><h2></h2>' + paras + '<p class="hand-sign" style="--d:' + (d + G.paragraphs.length * step).toFixed(2) + 's"></p></article>');
+      $('h2', letter).textContent = G.letterTitle;
+      var ps = letter.querySelectorAll('p');
+      G.paragraphs.forEach(function (t, i) { ps[i].textContent = t; });
+      ps[ps.length - 1].textContent = G.signature;
+      $('#gslot', s).appendChild(letter);
+      var row = el('<div class="cta-row rise" style="--d:' + ((d + G.paragraphs.length * step) + 0.6).toFixed(2) + 's">' + cta(G.button) + '</div>');
+      $('.cta', row).addEventListener('click', function () { chime(); goTo(7); });
+      s.appendChild(row);
+    }
+    return s;
+  }
+
+  function Finale() {
+    var F = CONFIG.finale, n = F.paragraphs.length;
+    function d(x) { return reduced ? 0 : x; }
+    var paras = F.paragraphs.map(function (p, i) { return '<p class="rise" style="--d:' + d(0.8 + i * 0.9).toFixed(2) + 's"></p>'; }).join('');
+    var s = el('<section class="screen finale"><h2 class="title rise" style="--d:' + d(0.2) + 's"></h2><div class="finale-text">' + paras + '</div>' +
+      '<div class="big-heart rise" style="--d:' + d(0.8 + n * 0.9).toFixed(2) + 's"><span class="big-heart-halo" aria-hidden="true"></span>' + heart(150, { glow: true }) + '</div>' +
+      '<p class="love-line rise" style="--d:' + d(1.2 + n * 0.9).toFixed(2) + 's"></p><p class="signature rise" style="--d:' + d(1.6 + n * 0.9).toFixed(2) + 's"></p>' +
+      '<div class="cta-row rise" style="--d:' + d(2.1 + n * 0.9).toFixed(2) + 's">' + cta(F.restartButton, 'cta-light') + '</div></section>');
+    $('.title', s).textContent = F.title;
+    var ps = s.querySelectorAll('.finale-text p'); F.paragraphs.forEach(function (t, i) { ps[i].textContent = t; });
+    $('.love-line', s).textContent = F.loveLine; $('.signature', s).textContent = F.signature;
+    $('.cta', s).addEventListener('click', function () { chime(); goTo(0); });
+    return s;
+  }
+
+  var STEPS = [Intro, Letter, Story, Gallery, Timer, Messages, Gift, Finale];
+  var LAST = STEPS.length - 1, step = 0, locked = false;
+
+  /* ---------- navigation ---------- */
+  var btnBack = $('#btn-back'), btnRestart = $('#btn-restart'), prog = $('#progress'), fill = $('#progress-fill');
+  function updateNav() {
+    var pct = Math.round((step / LAST) * 100);
+    fill.style.width = Math.max(pct, 4) + '%';
+    prog.setAttribute('aria-valuenow', String(pct));
+    prog.setAttribute('aria-valuetext', STEP_NAMES[step] + ' — ' + (step + 1) + ' من ' + STEPS.length);
+    btnBack.hidden = step === 0; btnRestart.hidden = step === 0;
+    app.dataset.theme = step === LAST ? 'dusk' : 'day';
+    stage.setAttribute('aria-label', STEP_NAMES[step]);
+  }
+  function errorSection() {
+    var s = el('<section class="screen"><div class="note-card glass"><p>حصلت مشكلة صغيرة 🥺 بس مفيش حاجة بتضيع.</p></div>' + cta('نبدأ من الأول 💗') + '</section>');
+    $('.cta', s).addEventListener('click', function () { goTo(0); });
+    return s;
+  }
+  function mount(n) {
+    runCleanups(); lbClose(); step = n;
+    var sec;
+    try { sec = STEPS[n](); } catch (err) { if (window.console) console.error(err); sec = errorSection(); }
+    stage.innerHTML = ''; stage.appendChild(sec); sec.classList.add('enter');
+    updateNav(); window.scrollTo(0, 0);
+    try { stage.focus({ preventScroll: true }); } catch (e) {}
+  }
+  function show(n) {
+    var old = stage.firstElementChild;
+    runCleanups();
+    if (old && !reduced) { old.classList.add('leave'); setTimeout(function () { mount(n); }, 400); } else mount(n);
+  }
+  function goTo(n, push) {
+    if (locked) return;
+    n = Math.min(Math.max(n, 0), LAST);
+    locked = true;
+    if (push !== false) { try { history.pushState({ step: n }, ''); } catch (e) {} }
+    show(n);
+    setTimeout(function () { locked = false; }, reduced ? 60 : 900);
+  }
+  btnBack.addEventListener('click', function () {
+    if (locked || step === 0) return;
+    var st = null; try { st = history.state; } catch (e) {}
+    if (st && st.step === step) { try { history.back(); return; } catch (e) {} }
+    goTo(step - 1, false);
+  });
+  btnRestart.addEventListener('click', function () { goTo(0); });
+  window.addEventListener('popstate', function (e) {
+    var n = e.state && typeof e.state.step === 'number' ? e.state.step : 0;
+    show(Math.min(Math.max(n, 0), LAST));
+  });
+  try { history.replaceState({ step: 0 }, ''); } catch (e) {}
+
+  mount(0);
+})();
+</script>
+
+</body></html>
